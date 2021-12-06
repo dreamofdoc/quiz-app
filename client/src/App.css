@@ -1,0 +1,141 @@
+body {
+    color: #000000;
+    margin: 0;
+    background-color: #FFFFFF;
+    font-family: "DejaVu Serif", sans-serif;
+}
+
+.App {
+    background-color: #FAEAF1;
+    padding: 20px;
+    margin: 50px;
+}
+
+.head {
+    text-align: center;
+    font-size: xxx-large;
+}
+
+.questionth {
+    text-align: center;
+    font-size: large;
+    margin: 5px 0;
+}
+
+.question-title {
+    text-align: center;
+    margin: 5px 0;
+    font-size: x-large;
+}
+
+.variant-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.variant-button {
+    background-color: #FFA0C8;
+    border: 2px solid black;
+    border-radius: 50px;
+    margin: 10px;
+    padding: 10px;
+    font-size: medium;
+    font-weight: bold;
+    font-style: italic;
+    cursor: pointer;
+}
+
+.container-styles {
+    height: 20px;
+    background-color: #e0e0de;
+    border-radius: 50px;
+    margin: 50px;
+}
+
+.label-styles {
+    padding: 5px;
+    color: black;
+    font-weight: bold;
+}
+
+.scoreboard {
+    text-align: center;
+    font-size: large;
+    font-style: italic;
+}
+
+.navbar {
+    background-color: #FFA0C8;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.brand {
+    margin: 10px 20px;
+    font-size: 30px;
+    font-family: Sahadeva, sans-serif;
+    color: #000000;
+}
+
+.nav-links {
+    list-style-type: none;
+    background-color: inherit;
+    color: #63565C;
+    padding: 5px;
+    margin: 10px 15px;
+}
+
+/*.nav-links:hover {*/
+/*    background-color: #4eb5f1;*/
+/*}*/
+
+.reg-login {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.nav-reg-login {
+    display: flex;
+    flex-direction: row;
+}
+
+.reg-log-btn {
+    text-decoration: none;
+    color: black;
+    font-family: "Phetsarath OT", sans-serif;
+}
+
+.reg-log-btn:hover {
+    color: #e0e0de;
+}
+
+input {
+    border: none;
+    background-color: #f2f2f2;
+    padding: 12px;
+    border-radius: 3px;
+    width: 250px;
+    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 10px;
+}
+
+.nav-head {
+    text-align: center;
+}
+
+.auth-inputs {
+    width: 350px;
+}
+
+@media screen and (max-width: 480px) {
+    .auth-inputs {
+        width: 80%;
+    }
+}

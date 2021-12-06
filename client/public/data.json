@@ -1,0 +1,38 @@
+[
+  {
+    "question": "What is the capital of France?",
+    "options": [
+      { "answer": "New York", "isCorrect": false },
+      { "answer": "London", "isCorrect": false },
+      { "answer": "Paris", "isCorrect": true },
+      { "answer": "Yerevan", "isCorrect": false }
+    ]
+  },
+  {
+    "question": "Height of Everest?",
+    "options": [
+      { "answer": 1555, "isCorrect": false },
+      { "answer": 8988, "isCorrect": true },
+      { "answer": 9650, "isCorrect": false },
+      { "answer": 7220, "isCorrect": false }
+    ]
+  },
+  {
+    "question": "Who is the author of Sherlock?",
+    "options": [
+      { "answer": "Arthur Conan Doyl", "isCorrect": true },
+      { "answer": "Albert Einstein", "isCorrect": false },
+      { "answer": "Albert Camus", "isCorrect": false },
+      { "answer": "Agata Qristi", "isCorrect": false }
+    ]
+  },
+  {
+    "question": "2 + 2 = ?",
+    "options": [
+      { "answer": 4, "isCorrect": true },
+      { "answer": 2, "isCorrect": false },
+      { "answer": 0, "isCorrect": false },
+      { "answer": -2, "isCorrect": false }
+    ]
+  }
+]
