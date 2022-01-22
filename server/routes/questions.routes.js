@@ -9,7 +9,7 @@ router.post("/questions", async (req, res) => {
         await question.save();
         res.status(200).json({ message: 'Question Created', question});
     } catch (error) {
-        res.status(500).json({ error });
+        res.status(400).json({ error });
     }
 });
 
@@ -18,21 +18,22 @@ router.get("/questions", async (req, res) => {
         const questions = await Question.find({});
         res.status(201).send({ questions });
     } catch (error) {
-        res.status(500).json({ error });
+        res.status(400).json({ error });
     }
 });
 
 router.patch("/questions/:id", async (req, res) => {
     const updates = Object.keys(req.body);
-    const validUpdates = ['title', 'options'];
+    const validUpdates = ['title', 'options', 'answer', 'isCorrect'];
     const isValidUpdate = updates.every(update => validUpdates.includes(update));
     if (!isValidUpdate) return res.status(400).json({ message: 'Invalid operation' });
     try {
-        const question = await Question.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const { title, options } = req.body;
+        const question = await Question.findByIdAndUpdate(req.params.id, { title, options }, { new: true, runValidators: true });
         if (!question) return res.status(404).json({ message: 'No question found' });
         res.json({ message: 'Question Updated' });
     } catch (error) {
-        res.status(500).json({ error });
+        res.status(400).json({ error });
     }
 });
 
@@ -42,7 +43,7 @@ router.delete("/questions/:id", async (req, res) => {
         if (!question) return res.status(404).send('No question found');
         res.json({ id: question._id });
     } catch (error) {
-        res.status(500).json({ error });
+        res.status(400).json({ error });
     }
 });
 

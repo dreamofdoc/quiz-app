@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
 
 const Login = () => {
+    const error = useSelector(state => state.user.error);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const role = useSelector(state => state.user.role);
 
     return (
         <div>
@@ -17,10 +17,15 @@ const Login = () => {
             <div className="reg-login">
                 <form onSubmit={(e) => {
                     e.preventDefault();
-                    dispatch(login(email, password));
-                    navigate('/');
-                    setEmail('');
-                    setPassword('');
+                    dispatch(login(email, password, (isAdmin, user) => {
+                        if (!user) {
+                            navigate('/login');
+                        } else {
+                            setEmail('');
+                            setPassword('');
+                            isAdmin ? navigate('/admin') : navigate('/');
+                        }
+                    }));
                 }}>
                     <div>
                         <TextField
@@ -42,6 +47,7 @@ const Login = () => {
                             onChange={e => setPassword(e.target.value)}
                         />
                     </div><br/>
+                    {error && <p className="errors">{error}</p>}
                     <div style={{textAlign: 'center'}}>
                         <Button
                             size="medium"

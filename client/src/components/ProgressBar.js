@@ -8,7 +8,7 @@ const ProgressBar = ({ bgcolor, completed }) => {
         width: `${completed}%`,
         backgroundColor: bgcolor,
         borderRadius: 'inherit',
-        textAlign: 'right'
+        textAlign: 'center'
     }
 
     return (

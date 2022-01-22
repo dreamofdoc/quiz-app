@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { registration } from "../actions/user";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, TextField } from "@mui/material";
+import { setError } from "../reducers/userReducer";
 
 const Register = () => {
-    const [role, setRole] = useState('');
+    const error = useSelector(state => state.user.error);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
@@ -16,22 +17,18 @@ const Register = () => {
             <h2 className="nav-head">Register</h2>
             <div className="reg-login">
                 <form onSubmit={(e) => {
-                    dispatch(registration(role, email, password));
                     e.preventDefault();
-                    setRole('');
-                    setEmail('');
-                    setPassword('');
-                    navigate('/login');
+                    dispatch(registration(email, password, user => {
+                        if (!user) {
+                            navigate('/register');
+                        } else {
+                            setEmail('');
+                            setPassword('');
+                            dispatch(setError(''));
+                            navigate('/login');
+                        }
+                    }));
                 }}>
-                    <div>
-                        <TextField
-                            className="auth-inputs"
-                            variant="standard"
-                            label="Role"
-                            value={role}
-                            onChange={e => setRole(e.target.value)}
-                        />
-                    </div><br/>
                     <div>
                         <TextField
                             className="auth-inputs"
@@ -52,6 +49,7 @@ const Register = () => {
                             onChange={e => setPassword(e.target.value)}
                         />
                     </div><br/>
+                    {error && <p className="errors">{error}</p>}
                     <div style={{textAlign: 'center'}}><Button size="medium" variant="contained" type="submit">Register</Button></div>
                 </form>
             </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../reducers/userReducer";
+import { setError } from "../reducers/userReducer";
 
 const NavBar = () => {
     const { isAuth } = useSelector(state => state.user);
@@ -15,12 +16,12 @@ const NavBar = () => {
             <ul className="nav-reg-login">
                 {!isAuth &&
                 <li className="nav-links">
-                    <Link className="reg-log-btn" to="/login">Login</Link>
+                    <Link className="reg-log-btn" to="/login" onClick={() => dispatch(setError(''))}>Login</Link>
                 </li>
                 }
                 {!isAuth &&
                 <li className="nav-links">
-                    <Link className="reg-log-btn" to="/register">Register</Link>
+                    <Link className="reg-log-btn" to="/register" onClick={() => dispatch(setError(''))}>Register</Link>
                 </li>
                 }
                 {isAuth && <li

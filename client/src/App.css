@@ -8,7 +8,7 @@ body {
 .App {
     background-color: #FAEAF1;
     padding: 20px;
-    margin: 50px;
+    margin: 20px 50px;
 }
 
 .head {
@@ -138,4 +138,37 @@ input {
     .auth-inputs {
         width: 80%;
     }
+}
+
+.table-cell {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.table {
+    margin: 0 auto;
+}
+
+.table-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.table-btn {
+    margin: 5px;
+}
+
+.errors {
+    color: darkred;
+    font-size: 12px;
+    font-style: italic;
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-weight: bold;
+    margin: 20px;
 }

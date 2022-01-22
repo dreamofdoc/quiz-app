@@ -1,24 +1,22 @@
-import React, { useEffect, useState}  from 'react';
+import React, { useEffect, useState }  from 'react';
 import ProgressBar from "./ProgressBar";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector}  from "react-redux";
-import { deleteQuestionApi, getQuestionsApi } from "../actions/question";
-import { setID } from "../reducers/questionReducer";
+import { getQuestionsApi } from "../actions/question";
+import {Link} from "react-router-dom";
 
 const Dashboard = () => {
     const questions = useSelector(state => state.question.questions);
-    const role = useSelector(state => state.user.role);
+    const { isAdmin } = useSelector(state => state.user);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getQuestionsApi());
-    }, []);
+    }, [dispatch]);
 
     const handleAnswer = (isCorrect) => {
         if (isCorrect) {
@@ -36,51 +34,6 @@ const Dashboard = () => {
             setShowScore(true);
         }
     };
-
-    function RenderRole() {
-        return role === 'admin' ? (<div>
-            <div>
-                <Button
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        dispatch(deleteQuestionApi(questions[currentQuestion]._id));
-                    }}
-                >
-                    Delete
-                </Button>
-            </div><br/>
-                <div>
-                    <Button
-                        size="small"
-                        variant="outlined"
-                        color="primary"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            dispatch(setID(questions[currentQuestion]._id));
-                            navigate(`/dashboard/${questions[currentQuestion]._id}`);
-                        }}
-                    >
-                        Update
-                    </Button>
-                </div><br/>
-                <div>
-                    <Button
-                        size="small"
-                        variant="outlined"
-                        color="primary"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            navigate(`/dashboard/add_question`);
-                        }}
-                    >
-                        Add Question
-                    </Button>
-            </div>
-        </div>) : null
-    }
 
     return (
         loading ? (<p>Loading...</p>) : (
@@ -101,12 +54,11 @@ const Dashboard = () => {
                     <>
                         <ProgressBar
                             bgcolor={'#FBBCEF'}
-                            completed={currentQuestion * (100 / questions.length)}
+                            completed={currentQuestion * (100 / questions.length).toFixed(2)}
                         />
                         <div>
-                            <div className="questionth">Question {currentQuestion + 1}/{questions.length}</div>
-                        </div>
-                        <RenderRole />
+                            <h3 className="questionth">Question {currentQuestion + 1}/{questions.length}</h3>
+                        </div><br/>
                         <div className="question-title">{questions[currentQuestion].title}</div>
                         <div className="variant-container">
                             {questions[currentQuestion].options.map((answerOption, index) => (
@@ -119,9 +71,10 @@ const Dashboard = () => {
                                     </button>
                                 </div>
                             ))}
-                        </div>
+                        </div><br/>
                     </>
                 )}
+                {isAdmin && <Link to="/admin">Go Back to Admin Panel</Link>}
             </div>
         )
     );

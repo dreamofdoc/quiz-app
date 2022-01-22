@@ -1,11 +1,14 @@
 const REGISTER = 'REGISTER';
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
+const ADMIN = 'ADMIN';
+const SET_ERROR = 'SET_ERROR';
 
 const initialState = {
     currentUser: {},
     isAuth: false,
-    role: ''
+    isAdmin: false,
+    error: ''
 }
 
 export default function userReducer(state = initialState, action) {
@@ -14,14 +17,13 @@ export default function userReducer(state = initialState, action) {
             return {
                 ...state,
                 currentUser: {},
-                role: action.payload
             }
         case LOGIN:
             return {
                 ...state,
-                currentUser: action.payload,
+                currentUser: action.payload.user,
                 isAuth: true,
-                role: action.payload.role
+                isAdmin: action.payload.role
             }
         case LOGOUT:
             localStorage.removeItem('token');
@@ -29,7 +31,21 @@ export default function userReducer(state = initialState, action) {
                 ...state,
                 currentUser: {},
                 isAuth: false,
-                role: ''
+                isAdmin: false,
+                error: ''
+            }
+        case ADMIN:
+            return {
+                ...state,
+                isAdmin: action.payload
+            }
+        case SET_ERROR:
+            return {
+                ...state,
+                currentUser: {},
+                isAdmin: false,
+                isAuth: false,
+                error: action.payload
             }
 
         default:
@@ -37,6 +53,7 @@ export default function userReducer(state = initialState, action) {
     }
 }
 
-export const setRole = userRole => ({ type: REGISTER, payload: userRole });
+export const setRole = userRole => ({ type: ADMIN, payload: userRole });
 export const setUser = (user, role) => ({ type: LOGIN, payload: { user, role }});
 export const logout = () => ({ type: LOGOUT });
+export const setError = message => ({ type: SET_ERROR, payload: message });

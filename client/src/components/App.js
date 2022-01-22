@@ -11,15 +11,16 @@ import Landing from "./Landing";
 import Err404 from "./404";
 import UpdateQuestion from "./UpdateQuestion";
 import AddQuestion from "./AddQuestion";
+import AdminPanel from "./AdminPanel";
 
 function App() {
-    const isAuth = useSelector(state => state.user.isAuth);
+    const { isAuth, isAdmin } = useSelector(state => state.user);
     const id = useSelector(state => state.question.currentID);
     const dispatch = useDispatch();
 
     useEffect(() => {
        dispatch(auth());
-    }, []);
+    }, [dispatch]);
 
     return (
           <BrowserRouter>
@@ -37,9 +38,15 @@ function App() {
                           }
                           {isAuth &&
                               <Route>
-                                  <Route path="/dashboard/" element={<Dashboard/>}/>
-                                  <Route path={`/dashboard/${id}`} element={<UpdateQuestion/>}/>
-                                  <Route path="/dashboard/add_question" element={<AddQuestion/>}/>
+                                  <Route path="/dashboard" element={<Dashboard/>}/>
+                                  <Route path="*" element={<Err404/>}/>
+                              </Route>
+                          }
+                          {isAuth && isAdmin &&
+                              <Route>
+                                  <Route path="/admin/" element={<AdminPanel/>}/>
+                                  <Route path={`/admin/${id}`} element={<UpdateQuestion/>}/>
+                                  <Route path="/admin/add_question" element={<AddQuestion/>}/>
                                   <Route path="*" element={<Err404/>}/>
                               </Route>
                           }

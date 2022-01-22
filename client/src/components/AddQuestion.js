@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { TextField, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addQuestionApi } from "../actions/question";
+import { setQError } from "../reducers/questionReducer";
 
 const AddQuestion = () => {
+    const error = useSelector(state => state.question.error);
     const [title, setTitle] = useState('');
-    const [option1, setOption1] = useState({});
-    const [option2, setOption2] = useState({});
-    const [option3, setOption3] = useState({});
-    const [option4, setOption4] = useState({});
+    const [option1, setOption1] = useState({answer: '', isCorrect: false});
+    const [option2, setOption2] = useState({answer: '', isCorrect: false});
+    const [option3, setOption3] = useState({answer: '', isCorrect: false});
+    const [option4, setOption4] = useState({answer: '', isCorrect: false});
     const [options, setOptions] = useState([]);
 
     const navigate = useNavigate();
@@ -18,11 +20,21 @@ const AddQuestion = () => {
     return (
         <div>
             <h2>Add a question</h2>
+            {error && <p className="errors">{error}</p>}
             <form onSubmit={(e) => {
                 e.preventDefault();
-                dispatch(addQuestionApi(title, options));
-                setTitle('');
-                navigate('/dashboard');
+                dispatch(addQuestionApi(title, options, (question, err) => {
+                    if (!question) {
+                        navigate('/admin/add_question');
+                        if (err) {
+                            setOptions([])
+                        }
+                    } else {
+                        navigate('/admin');
+                        dispatch(setQError(''));
+                        setTitle('');
+                    }
+                }));
             }}>
                 <TextField
                     variant="standard"
@@ -39,17 +51,12 @@ const AddQuestion = () => {
                         }}
                     />
                     <input
-                        type="checkbox"
-                        name="isTrue"
+                        name="option"
+                        type="radio"
+                        id="isTrue"
                         onChange={(e) => setOption1({...option1, isCorrect: e.target.checked})}
                     />
-                    <label htmlFor="isTrue">True</label>
-                    <input
-                        type="checkbox"
-                        name="isFalse"
-                        onChange={(e) => setOption1({...option1, isCorrect: !e.target.checked})}
-                    />
-                    <label htmlFor="isFalse">False</label><br/>
+                    <label htmlFor="isTrue">Is Right</label>
                 </div><br/>
                 <div>
                     <TextField
@@ -60,17 +67,12 @@ const AddQuestion = () => {
                         }}
                     />
                     <input
-                        type="checkbox"
-                        name="isTrue2"
+                        name="option"
+                        type="radio"
+                        id="isTrue2"
                         onChange={(e) => setOption2({...option2, isCorrect: e.target.checked})}
                     />
-                    <label htmlFor="isTrue2">True</label>
-                    <input
-                        type="checkbox"
-                        name="isFalse2"
-                        onChange={(e) => setOption2({...option2, isCorrect: !e.target.checked})}
-                    />
-                    <label htmlFor="isFalse2">False</label><br/>
+                    <label htmlFor="isTrue2">Is Right</label>
                 </div><br/>
                 <div>
                     <TextField
@@ -81,17 +83,12 @@ const AddQuestion = () => {
                         }}
                     />
                     <input
-                        type="checkbox"
-                        name="isTrue"
+                        name="option"
+                        type="radio"
+                        id="isTrue3"
                         onChange={(e) => setOption3({...option3, isCorrect: e.target.checked})}
                     />
-                    <label htmlFor="isTrue">True</label>
-                    <input
-                        type="checkbox"
-                        name="isFalse"
-                        onChange={(e) => setOption3({...option3, isCorrect: !e.target.checked})}
-                    />
-                    <label htmlFor="isFalse">False</label><br/>
+                    <label htmlFor="isTrue3">Is Right</label>
                 </div><br/>
                 <div>
                     <TextField
@@ -102,24 +99,22 @@ const AddQuestion = () => {
                         }}
                     />
                     <input
-                        type="checkbox"
-                        name="isTrue"
+                        name="option"
+                        type="radio"
+                        id="isTrue4"
                         onChange={(e) => setOption4({...option4, isCorrect: e.target.checked})}
                     />
-                    <label htmlFor="isTrue">True</label>
-                    <input
-                        type="checkbox"
-                        name="isFalse"
-                        onChange={(e) => setOption4({...option4, isCorrect: !e.target.checked})}
-                    />
-                    <label htmlFor="isFalse">False</label>
-                </div><br/><br/>
+                    <label htmlFor="isTrue4">Is Right</label>
+                </div><br/>
+                <br/>
                 <Button
                     type="submit"
                     variant="contained"
                     color="secondary"
                     size="small"
-                    onClick={() => setOptions([...options, option1, option2, option3, option4])}
+                    onClick={() => {
+                        setOptions([...options, option1, option2, option3, option4]);
+                    }}
                 >
                     Add Question
                 </Button>

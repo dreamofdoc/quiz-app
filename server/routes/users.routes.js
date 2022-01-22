@@ -16,13 +16,13 @@ router.post('/register',
         try {
             const validationErrors = validationResult(req);
             if (!validationErrors.isEmpty()) return res.status(400).json({ message: validationErrors.errors[0].msg });
-            const { role, email, password } = req.body;
+            const { isAdmin, email, password } = req.body;
             const hashedPassword = await hash(password, 8);
-            const user = new User({ role, email, password: hashedPassword });
+            const user = new User({ isAdmin, email, password: hashedPassword });
             await user.save();
-            res.json({ role, message: 'User created' })
+            res.json({ user })
         } catch (error) {
-            res.status(500).json({ error });
+            res.status(400).json({ error });
         }
     }
 );
@@ -31,17 +31,17 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'Invalid email' });
+        if (!user) return res.status(400).json({ message: 'Invalid email or password' });
         const isValidPassword = await compare(password, user.password);
-        if (!isValidPassword) return res.status(400).json({ message: 'Invalid password' });
+        if (!isValidPassword) return res.status(400).json({ message: 'Invalid email or password' });
         const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
         res.json({
             token,
             user,
-            role: user.role
+            isAdmin: user.isAdmin
         });
     } catch (error) {
-        res.status(500).json({ error });
+        res.status(400).json({ error });
     }
 });
 
@@ -50,9 +50,9 @@ router.get('/auth', authMiddleware,
         try {
             const user = await User.findOne({ _id: req.user.id });
             const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
-            res.json({ token, user });
+            res.status(200).json({ token, user });
         } catch (error) {
-            res.json({ message: 'Server error' })
+            res.status(400).json({ error });
         }
     }
 );
